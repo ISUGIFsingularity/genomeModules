@@ -16,7 +16,7 @@ NAME="$1"
 BUILD="$2"
 REF="$3"
 GFF="$4"
-GENMODgit="./genomeModules"
+export GENMODgit="./genomeModules"
 GENMOD="./"
 
 # create a location for where to store your genome modules
@@ -24,6 +24,7 @@ GSEQ=${GENMOD}"/genomes/sequences"
 GMOD=${GENMOD}"/genomes/modules"
 #intervals set to 100kb
 WINDOW=100000
+echo $GSEQ
 
 mkdir -p ${GSEQ}/${NAME}/${BUILD}
 mkdir -p ${GMOD}/${NAME}
@@ -75,16 +76,16 @@ mv ${NAME}_${BUILD}* ${GSEQ}/${NAME}/${BUILD}/
 fi
 
 # build index for GSNAP, Bowtie2, BWA and SAMTOOLS
-parallel <<FIL
+#parallel <<FIL
 
-./wrappers/GM gmap_build -d ${NAME}_${BUILD} -D ${GSEQ}/${NAME}/${BUILD} ${REF}
-./wrappers/GM bowtie2-build ${REF} ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}
-./wrappers/GM samtools faidx ${REF}
-./wrappers/GM bwa index -p ${NAME}_${BUILD} -a bwtsw ${REF}
-./wrappers/GM picard DCreateSequenceDictionary \
+${GENMODgit}/wrappers/GM gmap_build -d ${NAME}_${BUILD} -D ${GSEQ}/${NAME}/${BUILD} ${REF}
+${GENMODgit}/wrappers/GM bowtie2-build ${REF} ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}
+${GENMODgit}/wrappers/GM samtools faidx ${REF}
+${GENMODgit}/wrappers/GM bwa index -p ${NAME}_${BUILD} -a bwtsw ${REF}
+${GENMODgit}/wrappers/GM picard CreateSequenceDictionary \
   REFERENCE=${REF} \
   OUTPUT=${NAME}_${BUILD}.dict
-FIL
+#FIL
 # cleanup
 mv ${REF}.fai ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}.fai
 mv ${NAME}_${BUILD}* ${GSEQ}/${NAME}/${BUILD}/
@@ -93,8 +94,8 @@ ln -s ${NAME}_${BUILD}.fai ${NAME}_${BUILD}.fasta.fai
 
 # build intervals and cleanup
 ${GENMODgit}/bin/fasta_length.py ${REF} > ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt
-./wrappers/GM bedtools makewindows -w ${WINDOW} -g  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt |  awk '{print $1"\t"$2+1"\t"$3}' >  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed
-./wrappers/GM picard BedToIntervalList \
+${GENMODgit}/wrappers/GM bedtools makewindows -w ${WINDOW} -g  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt |  awk '{print $1"\t"$2+1"\t"$3}' >  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed
+${GENMODgit}/wrappers/GM picard BedToIntervalList \
   INPUT=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed \
   SEQUENCE_DICTIONARY=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.dict \
   OUTPUT=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_gatk_intervals.list
@@ -103,5 +104,3 @@ ${GENMODgit}/bin/fasta_length.py ${REF} > ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUI
 
 cp ${REF} ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}.fasta
 cp ${GFF} ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}.gff3
-
-
