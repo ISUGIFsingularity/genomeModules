@@ -71,7 +71,7 @@ MODULEFILE
 
 # Create Fasta files from GFF file
 if [ $# -eq 4 ] ; then
-${GENMODgit}/bin/gff2fasta.pl ${REF} ${GFF} ${NAME}_${BUILD}
+perl ${GENMODgit}/bin/gff2fasta.pl ${REF} ${GFF} ${NAME}_${BUILD}
 mv ${NAME}_${BUILD}* ${GSEQ}/${NAME}/${BUILD}/
 fi
 
