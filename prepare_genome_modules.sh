@@ -16,10 +16,12 @@ NAME="$1"
 BUILD="$2"
 REF="$3"
 GFF="$4"
+GENMODgit="./genomeModules"
+GENMOD="./"
 
 # create a location for where to store your genome modules
-GSEQ="/work/GIF/severin/genomes/sequences"
-GMOD="/work/GIF/severin/genomes/modules"
+GSEQ=${GENMOD}"/genomes/sequences"
+GMOD=${GENMOD}"/genomes/modules"
 #intervals set to 100kb
 WINDOW=100000
 
@@ -68,7 +70,7 @@ MODULEFILE
 
 # Create Fasta files from GFF file
 if [ $# -eq 4 ] ; then
-./bin/gff2fasta.pl ${REF} ${GFF} ${NAME}_${BUILD}
+${GENMODgit}/bin/gff2fasta.pl ${REF} ${GFF} ${NAME}_${BUILD}
 mv ${NAME}_${BUILD}* ${GSEQ}/${NAME}/${BUILD}/
 fi
 
@@ -90,9 +92,9 @@ mv ${NAME}_${BUILD}.dict ${GSEQ}/${NAME}/${BUILD}/
 ln -s ${NAME}_${BUILD}.fai ${NAME}_${BUILD}.fasta.fai
 
 # build intervals and cleanup
-./bin/fasta_length.py ${REF} > ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt
+${GENMODgit}/bin/fasta_length.py ${REF} > ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt
 ./wrappers/GM bedtools makewindows -w ${WINDOW} -g  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt |  awk '{print $1"\t"$2+1"\t"$3}' >  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed
-./wrappers/GM java -Xmx100G -jar $PICARD BedToIntervalList \
+./wrappers/GM picard BedToIntervalList \
   INPUT=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed \
   SEQUENCE_DICTIONARY=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.dict \
   OUTPUT=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_gatk_intervals.list
