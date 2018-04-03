@@ -71,7 +71,7 @@ MODULEFILE
 
 # Create Fasta files from GFF file
 if [ $# -eq 4 ] ; then
-perl ${GENMODgit}/bin/gff2fasta.pl ${REF} ${GFF} ${NAME}_${BUILD}
+${GENMODgit}/wrappers/gff2fasta ${REF} ${GFF} ${NAME}_${BUILD}
 mv ${NAME}_${BUILD}* ${GSEQ}/${NAME}/${BUILD}/
 fi
 
@@ -93,7 +93,7 @@ mv ${NAME}_${BUILD}.dict ${GSEQ}/${NAME}/${BUILD}/
 ln -s ${NAME}_${BUILD}.fai ${NAME}_${BUILD}.fasta.fai
 
 # build intervals and cleanup
-${GENMODgit}/bin/fasta_length.py ${REF} > ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt
+${GENMODgit}/wrappers/fasta_length ${REF} > ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt
 ${GENMODgit}/wrappers/GM bedtools makewindows -w ${WINDOW} -g  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt |  awk '{print $1"\t"$2+1"\t"$3}' >  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed
 ${GENMODgit}/wrappers/GM picard BedToIntervalList \
   INPUT=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed \
