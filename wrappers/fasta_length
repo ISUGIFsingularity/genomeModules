@@ -1,0 +1,3 @@
+#!/bin/bash
+
+singularity exec --bind $PWD $GENMODgit/SIMG/utility.simg $GENMODgit/bin/fasta_length.py $@
