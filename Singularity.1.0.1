@@ -3,7 +3,7 @@ From:ResearchIT/spack-singularity:openmpi
 
 %labels
 MAINTAINER severin@iastate.edu
-APPLICATION snpphylo
+APPLICATION genomeModules
 
 %help
 This container contains all the necessary programs to create genome modules.
@@ -38,7 +38,7 @@ spack install perl
 spack install perl-bio-perl
 spack install py-biopython
 
-export PATH=$SPACK_ROOT/isugif/snpPhylo/bin:$SPACK_ROOT/isugif//wrappers:$PATH
+export PATH=$SPACK_ROOT/isugif/utilities/utilities:$SPACK_ROOT/isugif/utilities/wrappers:$PATH
 #for d in /opt/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/*/bin; do export PATH="$PATH:$d"; done
 
 cd $SPACK_ROOT
