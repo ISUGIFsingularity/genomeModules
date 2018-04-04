@@ -16,7 +16,7 @@ NAME="$1"
 BUILD="$2"
 REF="$3"
 GFF="$4"
-export GENMODgit="./genomeModules"
+export GENMODgit="/work/GIF/severin/isugif/genomeModules"
 GENMOD="./"
 
 # create a location for where to store your genome modules
