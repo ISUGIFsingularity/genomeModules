@@ -3,7 +3,7 @@ From:ResearchIT/spack-singularity:openmpi
 
 %labels
 MAINTAINER severin@iastate.edu
-APPLICATION genomeModules
+APPLICATION snpphylo
 
 %help
 This container contains all the necessary programs to create genome modules.
@@ -16,11 +16,18 @@ export SPACK_ROOT
 export PATH=$SPACK_ROOT/bin:$PATH
 source /etc/profile.d/modules.sh
 source $SPACK_ROOT/share/spack/setup-env.sh
-export PATH=$SPACK_ROOT/isugif/utilities/utilities/:$PATH
-module load python
-module load perl
-module load perl-bio-perl
-module load py-biopython
+export PATH=$SPACK_ROOT/isugif/snpPhylo/bin:$SPACK_ROOT/isugif/snpPhylo/wrappers:$PATH
+#for d in /opt/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/*/bin; do export PATH="$PATH:$d"; done
+
+module load gmap-gsnap
+module load bowtie2
+module load bwa
+module load gatk
+module load bedtools2
+module load samtools
+module load picard
+module load jdk
+export _JAVA_OPTIONS="-Xmx100G"
 
 %post
 export SPACK_ROOT=/opt/spack
@@ -33,16 +40,13 @@ yum clean all
 export FORCE_UNSAFE_CONFIGURE=1 
 
 source $SPACK_ROOT/share/spack/setup-env.sh
-spack install python
-spack install perl
-spack install perl-bio-perl
-spack install py-biopython
 
-export PATH=$SPACK_ROOT/isugif/utilities/utilities:$SPACK_ROOT/isugif/utilities/wrappers:$PATH
-#for d in /opt/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/*/bin; do export PATH="$PATH:$d"; done
+
+export PATH=$SPACK_ROOT/isugif/snpPhylo/bin:$SPACK_ROOT/isugif/snpPhylo/wrappers:$PATH
+for d in /opt/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/*/bin; do export PATH="$PATH:$d"; done
+
 
 cd $SPACK_ROOT
-rm -rf isugif
 mkdir isugif
 cd isugif
 git clone https://github.com/ISUGIFsingularity/utilities.git
@@ -50,4 +54,5 @@ ls utilities/utilities/
 
 %runscript
 ls $SPACK_ROOT/isugif/utilities/utilities/
+#exec run_BUSCO.py "$@"
 
