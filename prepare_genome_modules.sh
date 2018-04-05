@@ -97,7 +97,7 @@ ${GENMODgit}/wrappers/fasta_length ${REF} > ${GSEQ}/${NAME}/${BUILD}/${NAME}_${B
 ${GENMODgit}/wrappers/GM bedtools makewindows -w ${WINDOW} -g  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_length.txt |  awk '{print $1"\t"$2+1"\t"$3}' >  ${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed
 ${GENMODgit}/wrappers/GM picard BedToIntervalList \
   INPUT=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.bed \
-  SEQUENCE_DICTIONARY=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_coords.dict \
+  SEQUENCE_DICTIONARY=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}.dict \
   OUTPUT=${GSEQ}/${NAME}/${BUILD}/${NAME}_${BUILD}_100kb_gatk_intervals.list
 
 #move reference and GFF file to genome module locations
