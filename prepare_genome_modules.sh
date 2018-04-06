@@ -16,8 +16,8 @@ NAME="$1"
 BUILD="$2"
 REF="$3"
 GFF="$4"
-export GENMODgit="/work/GIF/severin/isugif/genomeModules"
-GENMOD="./"
+export GENMODgit="/pylon5/mc48o5p/severin/isugif/genomeModules"
+GENMOD="/pylon5/mc48o5p/severin/genmodTest/"
 
 # create a location for where to store your genome modules
 GSEQ=${GENMOD}"/genomes/sequences"
