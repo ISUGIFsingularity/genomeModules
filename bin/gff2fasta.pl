@@ -1,6 +1,5 @@
 #taken from https://www.biostars.org/p/46281/ and modified as needed 10/15/15
 use strict;
-use warnings;
 use Bio::Seq;
 use Bio::SeqIO;
 use Bio::DB::Fasta;
